@@ -61,7 +61,7 @@
 							</div>
 						</div>
 					</div><!--Comments-->
-					<div class="response-area">
+					<div class="response-area" id="comments_area">
 						<h2> نظرات ({{ all_comments.count }})</h2>
 						<ul class="media-list">
                             {% for comment in comments %}
@@ -80,7 +80,7 @@
 										<li><i class="fa fa-calendar"></i>{{ comment.create_date | show_jalali_date }}</li>
 									</ul>
                                     <p>{{ comment.text }}</p>
-									<a class="btn btn-primary" href=""><i class="fa fa-reply"></i>پاسـخ</a>
+									<a class="btn btn-primary" onclick="comment_anwser({{ comment.id }})"><i class="fa fa-reply"></i>پاسـخ</a>
 								</div>
 							</li>
 
@@ -99,7 +99,6 @@
 										<li><i class="fa fa-calendar"></i>{{ sub_comment.create_date | show_jalali_date }}</li>
 									</ul>
                                     <p>{{ sub_comment.text }}</p>
-									<a class="btn btn-primary" href=""><i class="fa fa-reply"></i>پاسـخ</a>
 								</div>
 							</li>
                             {% endfor %}
@@ -110,38 +109,25 @@
 
 					</div><!--/Response-area-->
 					<div class="replay-box">
-						<div class="row">
+                        {% if request.user.is_authenticated %}
+                            <div class="row" id="comment_form">
 
-							<div class="col-sm-8">
+							<div class="col-sm-12">
 								<div class="text-area">
 									<div class="blank-arrow">
 										<label>متن پیام</label>
 									</div>
 									<span>*</span>
-									<textarea name="message" rows="11"></textarea>
-									<a class="btn btn-primary" href="">ارسـال نظـر</a>
+                                    <input type="hidden" id="parentid" value="">
+									<textarea name="message" rows="11" id="commenttext"></textarea>
+									<a class="btn btn-primary" onclick="sendcomment({{ object.id }})">ارسـال نظـر</a>
 								</div>
 							</div>
-							<div class="col-sm-4">
-								<h2>نظـر خود را بنویسیـد</h2>
-								<form>
-									<div class="blank-arrow">
-										<label>نام</label>
-									</div>
-									<span>*</span>
-									<input type="text" placeholder="نام شما ...">
-									<div class="blank-arrow">
-										<label>آدرس ایمیـل</label>
-									</div>
-									<span>*</span>
-									<input type="email" placeholder="ایمیـل شما ...">
-									<div class="blank-arrow">
-										<label>وبسایت</label>
-									</div>
-									<input type="email" placeholder="آدرس وبسایـت">
-								</form>
 							</div>
-						</div>
+
+                         {% else %}
+                            <div class="alert alert-warning">برای ثبت نظر باید <a href="{% url 'login_page' %}"> لاگین </a>کنید</div>
+                        {% endif %}
 					</div><!--/Repaly Box-->
 				</div>
 
